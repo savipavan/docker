@@ -1,0 +1,1114 @@
+Docker Deep Dive
+----------------
+1. Introduction
+
+2. Course Introduction:
+--------
+
+2.2 What we learn:
+- Linux Containers:
+	- Containers vs Virtual Machines
+	- Kernel namespaces, cgroups, capabilities
+- Docker Enginer
+	- Execution Driver: libcontainer vs LXC
+	- AUFS, OverlayFS, Device Mapper
+- Docker Images:
+	- docker build | Docker Images | Docker inspect
+	- Union mounts, Layering, Dockerfile
+- Docker Containers
+	- docker start|stop|restart
+- Registries
+- Volumes
+- Networking
+
+2.3 Prerequisites:
+---
+
+3.1 Introducing Containers:
+-----
+- it's all about applications
+
+server:application
+	1	:	1
+
+Virtulization: KVM, vmware and Xen
+
+3.2 The ugly virtual machines
+
+OS!=Business Value
+
+3.3 What are containers?
+- Containers are more lightweight than virtual machines
+- Containers consume less CPU, RAM and disk resource than Virtual Machines.
+
+3.4 How Containers work:
+----
+- user space isolation accomplishes through Kernel Namespaces 
+	- The pid namespace
+	- The net namespace
+	- The mnt namespace
+	- The user namespace
+
+- Control Groups(cgroups)
+- cgroups groups together and apply the limits
+
+- Capabilities:
+
+3.5 Docker:
+---
+- Docker is a container run time.
+The Evolving Docker Platform
+- Registry
+- Clustering
+- Orchestration
+- networking
+
+docker is company is part of dotCloud
+
+- LXC and Docker...
+- libcontainer is replacement for LXC: it allows to go cross platform. It is default execution driver for docker containers
+
+3.6 The Future of Docker and Container:
+----
+
+4.1 Installing Ubuntu and Linux
+
+--
+5.1 Installing and Updating Docker
+-----
+
+5.2 Installing in Ubuntu
+
+# check the docker is running
+$ service docker.io status
+
+# Kernel version 3.10
+$ uname -a 
+
+# update the OS
+$ apt-get update
+
+# Install Docker
+$ apt-get install -y docker.io
+
+# check the service is running now
+$ service docker.io status
+
+$ docker -v
+
+# docker version
+$ docker version
+
+# docker info
+Storage Driver: aufs
+
+5.3 Installing docker in centos
+----
+$ yum install -y docker
+
+$ systemctl start docker.service
+
+$ systemctl status docker.service
+
+$ docker -v
+
+# docker version
+$ docker version
+
+# docker info
+Storage Driver: devicemapper
+
+5.4 Updating Docker:
+-----
+# Make sure you back your data up before performing upgrades etc...
+Most of the time..... Containers/Docker are not an excuse to abandon best practices
+
+$ docker -v
+
+# add key
+$ wget -qO- https://get.docker.com/gpg | apt-key add -
+
+#add docker repo
+$ echo deb http://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+
+$ apt-get update
+
+$ apt-get install lxc-docker
+
+$ docker version
+
+5.4 Granting docker control to Non-root users
+----
+# docker need root priviledges
+# Binds to /var/run/docker.sock
+
+$ ls -l /run
+
+# add a normal user to docker groups
+#Adding users to the docker group.
+	- Control which user accounts are members of this group.
+	- Regularly audit membership of the Docker Group.
+$ docker run -it ubuntu /bin/bash
+
+# check group exists or not?
+$ cat /etc/group
+
+$ sudo gpasswd -a npoulton docker
+$ cat /etc/group
+
+# log off and log back on
+$ docker run -it ubuntu /bin/bash
+
+5.6 Configuring Docker to Communicate Over the Network
+-------
+$ docker -v
+
+# check whether the network listening port
+$ netstat -tlp
+
+$ service docker stop
+
+$ docker -H 192.168.56.50.:2345 -d &
+
+$ netstat -tlp
+
+$ docker info
+
+# in another centos set the environment variable
+$ export DOCKER_HOST="tcp://192.168.56.50:2375
+
+$ docker version
+$ docker info
+
+# if we need docker daemon to talk with local daemon
+
+$ export DOCKER_HOST=
+
+5.7 Playing Around with Our First Docker Container
+---------
+Ubuntu:
+------
+$ docker run -it centos /bin/bash
+
+$ ps -elf
+$ ping 8.8.8.8
+
+$ cat /etc/hosts
+
+$ ip a
+
+$ uname -a
+# check the kernel version
+
+$ yum check-update
+
+$ exit
+# container would stop
+
+$ docker ps
+$ docker ps -a
+
+$ ls -l /var/lib/docker/aufs/diff/
+
+$ ls -l /var/lib/docker/aufs/diff/ff7f94.......
+
+$ ls -l /var/lib/docker/aufs/diff/ff7f94......./tmp
+
+$ $ ls -l /var/lib/docker/aufs/diff/ff7f94......./tmp/test
+
+$ docker start <<Container no>> ff76f94
+
+$ docker attach ff76f94
+
+$ cat /tmp/testfile
+
+
+6. Major Docker Components : Module Intro
+---
+Docker Engine
+Images
+Container
+Registries and Repositories
+
+6.1 The high level picture
+----
+The Big Picture
+- Containers can contain malicious code
+- Trust the code you run!
+
+6.3 Docker Engine:
+---
+Docker daemon or docker run time
+
+6.4 Docker images:
+----
+
+$ docker run -t centos /bin/bash
+
+## -a refers to all fedra images
+$ docker pull -a fedora
+
+$ docker images fedora
+# images stored locally under /var/lib/docker/<storage driver>
+
+6.5 Docker containers:
+--
+$ running instances of an images
+
+$ docker run -it ubuntu /bin/bash
+
+$ docker images fedora
+
+$ docker images
+
+$ docker ps
+$ docker ps -a
+
+
+6.6 Docker hub:
+----
+hub.docker.com
+
+7. A Closer look at images and containers:
+-----
+7.1 A Closer Look at Images and Containers : Image Layers
+----------
+
+7.2 A Closer Look at Images and Containers : Union Mounts
+-----
+- Image layering is accomplished through union mounts
+
+7.3 A Closer Look at Images and Containers : Where Images Are Stored
+--------
+$ docker images
+
+$ docker pull coreos/apache
+
+$ docker images --tree
+
+$ ls -l /var/lib/docker/aufs/layers
+
+$ cat /var/lib/docker/aufs/layers/87...<<Layer Name>>
+
+#check the directory for the images
+$ ls -l /var/lib/docker/aufs/diff/87.../
+
+7.5 Copying Images to Other Hosts:
+-----------
+$ docker images
+
+$ docker run ubuntu /bin/bash -c "echo 'cool content' > /tmp/cool-file"
+
+$ docker ps -a
+
+$ docker commit <<imdae id>> fridge
+
+$ docker images
+
+$ docker images --tree
+
+$ docker history fridge
+
+$ docker save -o /tmp/fridge.tar fridge
+
+$ ls -lh /tmp/fridge.tar
+
+## on centos node
+$ tar -tf /tmp/fridge.tar
+
+$ docker load -i /tmp/fridge.tar
+
+$ docker images
+$ docker run -it fridge /bin/bash
+
+$ cat /tmp/cool-file
+
+7.6 The Top Writeable Layer of Containers
+-------
+- Every container gets its own writable top layer
+
+7.7 One Process per Container
+-------
+$ docker run -d ubuntu /bin/bash -c "ping 8.8.8.8 -c 30"
+
+$ docker ps
+
+# check the processes running inside the container
+$ docker top 2b8f2ac<<instance name>>
+
+$ docker ps -a
+
+7.8 Commands for Working with Containers
+-------
+$ docker run --cpu-shares=256
+$ docker run memory=1g
+
+$ docker run -d ubuntu:14.04.1 /bin/bash -c "ping 8.8.8.8"
+
+$ docker ps
+
+$ docker inspect <<image id>>
+
+$ docker ps
+
+$ docker attach nostalgic_mayer
+
+8. Container Management : Module Intro
+------------
+$ container management
+$ container config
+$ look inside Running containers
+$ Different ways of Get Shell Access
+
+8. Container Management : Starting and Stopping Containers
+-----
+# start the container
+$ docker run -it ubuntu:14.04 /bin/bash
+
+# If we exit, container can be stopped. If we still want to exist and still container to be run
+
+ctrl + p + q ## to detach from our container
+
+$ docker ps
+
+$ docker stop <<id>>
+
+$ docker ps
+
+# check the last container
+$ docker start <<id>>
+
+$ docker attach <<id>>
+$ ctrl + p + q
+
+$ docker ps
+
+$ docker restart <<id>>
+$ docker ps
+
+# docker attach command required PID1(shell) command to attach it to local host
+
+8.3 Container Management : PID 1 and Containers
+----
+# in linux server, PID1 = init and it manages and takes care of other processes
+
+# In Container, PID1 = docker run ...<command>
+
+# "One process per Container"
+	- One concern per container
+	- Lean
+	- Simple!
+# we can run multiple processes per container
+
+8.4 Container Management : Deleting Containers
+----
+$ docker ps
+
+$ docker info
+
+$ ls -l /var/lib/docker/containers/
+
+$ ls -l /var/lib/docker/containers/ | wc -l
+
+$ docker run <<id>>
+
+# we cannot remove the running container
+$ docker stop <<id>>
+$ docker rm <<id>>
+
+$ docker ls
+
+$ docker info
+
+$ ls -l /var/lib/docker/containers/<<deleted container id>>
+
+# alias dps="docker ps"
+
+8.5 Container Management : Looking Inside of Containers
+----
+$ docker ps
+$ docker top <id>
+
+# phusion/baseimage has multiple running processes inside the container
+
+$ docker attach <<id>>
+$ ps -ef
+
+$ docker logs <<id>>
+
+8.6 Container Management : Low-level Container Info
+-------
+$ docker ps
+$ docker inspect <<image id>>
+
+$ ls -l /var/lib/docker/containers/<<container id>>
+
+$ cat /var/lib/docker/containers/<<container id>>/config.json
+
+8.7 Container Management : Getting a Shell in a Container
+----
+# docker attach
+	- Attaches to PID1 inside the container
+	- In the real world, PID 1 inside a container will probably not be a shell.
+	- ssh:
+		- Most containers wont be running an SSH server
+- nsenter
+	- Allows us to enter Namespaces
+	- Requires the container PID(get from "docker inspect"
+$ docker inspect <<container id>> | grep pid
+
+$ nsenter -m -u -n -p -i -t 1923 /bin/bash
+
+$ hostname
+$ ip a
+
+$exit
+$ docker ps
+
+$ docker-enter <<container id>>
+$ exit
+
+$ docker exec -it <<container id>> /bin/bash
+$ exit
+
+$ docker run -v /usr/local/bin:/target jpetazzo/nsenter
+
+9. Building from a Docker file:
+----------
+9.1 Building from a Dockerfile : Module Intro
+-------
+- The Big Picture
+- Dockerfile Basics
+- Creating a Dockerfile
+- Building from a Dockerfile
+
+9.2 Introducing a dockerfile
+
+- Dockerfile
+- Plain-test
+- Simple format
+- Instructions to build image
+
+9.3 Building from a Dockerfile : Creating a Dockerfile
+--------
+$ cd imagefile
+$ vi Dockerfile
+	# Ubuntu based hello world container
+	FROM ubuntu:16.04
+	MAINTAINER savipavan@gmail.com
+	RUN apt-get update
+	CMD ["echo", "Hello World"]
+	:wq!
+	
+
+## Run instructions:
+1. Used to run commands against our images that we're building
+2. Every RUN instruction adds a layer to our image
+
+9.4 Building from a Dockerfile : Building an Image from a Dockerfile
+-----
+$ cd imagefile
+$ ls -l
+
+$ docker build -t helloworld:0.1 .
+
+$ docker images tree <<image id>>
+$ docker history <<image id>>
+
+$ docker run helloworld:0.1
+
+9.5 Building from a Dockerfile : Inspecting a Dockerfile from Docker Hub
+--------
+## docker hub
+# read the Dockerfile
+
+9.6 Module Recap:
+-----
+- Dockerfile Basics
+- Building our Own Dockerfile
+- Docker Build -t <image-tag> .
+
+10. Working with Registries:
+----
+- Docker Hub
+- Running our own private Registry
+- Docker Hub Enterprise
+
+10.1 Creating a Public Repo on Docker Hub
+-------
+Registry ( hub.docker.com )
+- repo for ubuntu
+- repo for centos
+
+# login to the hub.docker.com
+# create an account
+
+# create a repo
+
+10.2 Working with Registries : Using Our Public Repo on Docker Hub
+-------
+$ docker images
+
+#first tag
+$ docker tag <<image id>> savipavan/helloworld:1.0
+
+$ docker images
+
+$ docker push nigelpoulton/helloworld:1.0
+# login with the user name and pwd
+
+## In centos
+$ docker images
+$ docker ps -a
+
+$ docker rm <<image id>> <<image id>>
+$ docker ps -a
+
+$ docker images
+
+$ docker rmi <<image id>> <<image id>>
+
+$ docker images
+
+$ docker pull savipavan/helloworld:1.0
+
+$ docker images
+
+10.3 Working with Registries : Introduction to Private Registries
+-------
+- Current stable registry was written in Python
+- Next version of registry is writing in go laungage.
+	- v2 image format
+	- JSON Registry API
+	- More secure
+
+10.4 Working with Registries : Building a Private Registry
+----
+$ docker version
+
+$ docker run -d -p 5000:5000 registry
+
+$ docker images
+
+$ docker ps
+
+10.5 Working with Registries : Using a Private Registry
+-----
+# in ubuntu:
+---
+$ docker images
+$ docker tag <<iamgeid>> debian8.dicker.course:5000/priv-test
+
+$ docker push debian8.docker.course:5000/priv-test
+
+$ docker images
+
+$ docker run -d debian8.dicker.course:5000/priv-test
+
+$ docker ps
+$ docker images
+
+10.6 Docker Hub Enterprise.
+# Docker hub goodness behind the corporate firewall.
+- Great for ... Enterprise:
+	- The full Docker experience.
+- Docker Inc.
+	- Docker can reach more potential customers.
+11. Dividing Deeper with Dockerfile:
+----
+- Module Outline:
+	- The Build Cache
+	- Dockerfile and Layers
+	- Dockerfile instructions
+		- CMD, ENTRYPOINT, ENV, VOLUME
+11.1 Diving Deeper with Dockerfile : The Build Cache
+----
+$ docker info
+
+$ docker images
+
+$ docker images --tree
+
+$ ls -l
+
+$ docker build -t="build1" .
+$ docker build -t="build2" .
+
+11.2 Diving Deeper with Dockerfile : Dockerfile and Layers
+---
+$ docker images
+$ docker info
+$ ls -l
+$ vim Dockerfile
+	FROM ubuntu:16.04
+	MAINTAINER savipavan@gmail.com
+	RUN apt-get update
+	RUN apt-get install -y apache2
+	RUN apt-get install -y vim
+	RUN apt-get install -y golang
+	CMD ["echo","Hello World"]
+$ docker build -t="build3" .
+$ docker images
+$ docker images --tree
+$ docker history <<imageid>>
+
+11.3 Diving Deeper with Dockerfile : Building a Web Server Dockerfile
+-----
+$ mkdir ~/web
+$ vim Dockerfile
+	# Simple web server for practices
+	FROM ubuntu:15.04
+	RUN apt-get update
+	RUN apt-get install -y apache2
+	RUN apt-get install -y apache2-utils
+	RUN apt-get install -y vim
+	RUN apt-get clean
+	EXPOSE 80
+	CMD ["apache2ctl", "-D", "FOREGROUND"]
+	:wq!
+	
+$ docker build -t="webserver"
+
+11.4 Diving Deeper with Dockerfile : Launching the Web Server Container
+-------
+$ docker image list
+$ docker run -d -p 80:80 webserver
+
+# ubuntu1404.docker.course
+
+# docker stop hopeful_wilson
+
+# browser open the container
+
+11.5 Diving Deeper with Dockerfile : Reducing the Number of Layers in an Image
+------
+$ docker history webserver
+
+$ vim Dockerfile
+	# Simple web server for practices
+	FROM ubuntu:15.04
+	RUN apt-get update
+	RUN apt-get install -y apache2 apache2-utils vim && apt-get clean
+	EXPOSE 80
+	CMD ["apache2ctl", "-D", "FOREGROUND"]
+	:wq!
+
+(or)
+
+$ vim Dockerfile
+	# Simple web server for practices
+	FROM ubuntu:15.04
+	RUN apt-get update
+	RUN apt-get install -y apache2 \ apache2-utils \
+	vim \
+	&& apt-get clean
+	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp*
+	EXPOSE 80
+	CMD ["apache2ctl", "-D", "FOREGROUND"]
+	:wq!
+
+$ docker build -t=webserver-small" .
+
+$ docker history webserver-small
+
+11.6 Diving Deeper with Dockerfile : The CMD Instruction
+-------
+CMD:
+- Run-time
+- Run commands in containers at launch time
+- Equivalent of -
+	- docker run <args> <command>
+	- docker run <args> /bin/bash
+- One per dockerfile
+
+RUN:
+- Build-time
+- Add layers to images
+- Used to install apps
+
+CMD executes in 2 formats:
+	- Shell Form:
+		- Commands are expresed the same way as well commands
+		- Commands get prepended by "/bin/sh -c"
+		- Variable expansion etc.
+		
+	Exec Form:
+		- JSON array style- ["command','arg1"]
+		- Containers dont need a shellAvoid string munging by the shell
+		- No shell features:
+			- No variable expansion
+			- No special characters
+
+11.7 Diving Deeper with Dockerfile : The ENTRYPOINT Instruction
+-----
+ENTRYPOINT : Can't be overridden at run-time with normal commands - docker run .. <command>
+
+FROM ubuntu:16.04
+
+$ docker run -d -p 80:80 web2 -D FOREGROUND
+
+$ vim Dockerfile
+	FROM ubuntu:16.04
+	RUN apt-get update && apt-get install -y iputils-ping apache2
+	ENV var1=ping var2=8.8.8.8
+	CMD $var1 $var2
+
+$ docker build -t="pinger"
+$ docker ps
+$ docker logs -f <<name of the container>>
+
+11.8 Diving Deeper with Dockerfile : Volumes and the VOLUME Instruction
+----
+docker run -it -v /test-vol --name=voltainer ubuntu:16.04 /bin/bash
+
+$ ls -l
+
+$ apt-get install nano
+
+$ nano /test-vol/testfile
+	container rock!
+:wq!
+
+$ ctrl + p + q
+
+$ docker inspect voltainer
+
+$ cat /var/lib/docker/vfs/dir/c83.../testfile
+
+$ docker run -it --volumes-from=voltainer ubuntu:15.04 /bin/bash
+
+# mount the volume
+$ docker run -v /data:/data
+
+$ vim Dockerfile
+	VOLUME /data
+
+# Delete the volume:
+$ docker rm -v <container>
+
+12. Docker Networking:
+
+12.1 Docker Networking : Module Intro
+-----------
+- The "docker0" Virtual Bridge
+- Virtual Ethernet Interfaces
+- Exposing Ports
+- Linking Containers
+
+12.2 Docker Networking : The docker0 Bridge
+-----
+$ docker info
+
+$ docker ps
+
+$ ip a
+	docker 0
+		inet 172.17.42.1/16
+
+## these application should be installed to run below commands:
+$ apt-get install bridge-utils
+$ yum install bridge-utils
+
+$ brctl show docker0
+
+
+12.3 Docker Networking : Virtual Ethernet Interfaces
+-------
+# start the container
+$ docker images
+
+$ cat Dockerfile
+	FROM ubuntu:16.04
+	RUN apt-get update && apt-get install -y iputils-ping traceroute
+	ENTRYPOINT ["/bin/bash"]
+:wq!
+
+$ docker run -it --name=net1 net-image
+
+$ brctl show
+
+$ docker run -it --name=net2 net-image
+$ brctl show
+
+$ docker attach net1
+
+$ ip a
+$ ping oogle.com
+$ traceroute 8.8.8.8
+
+$ ctrl + p + q 
+
+12.4 Docker Networking : Network Configuration Files
+----
+$ docker run -it --name=net2 net-img
+
+$ docker inspect net2
+
+$ docker ps
+$ ls -l /var/lib/docker/containers/1d06a...-json.log
+
+$ cat /var/lib/docker/containers/1d06a.../resolve.conf
+
+$ cat /etc/resolve.conf
+
+$ cat /var/lib/docker/containers/1d06a.../hosts
+
+$ cat /etc/hosts
+
+$ docker run --dns=8.8.4.4 --name=dnstest net-img
+
+$ docker inspect dnstest
+
+12.5 Docker Networking : Exposing Ports
+---------
+$ vim Dockerfile
+	FROM ubuntu:16.04
+	RUN apt-get update && apt-get install -y iputils-ping traceroute apache2
+	EXPOSE 80
+	ENTRYPOINT ["apache2ctl"]
+	CMD ["-D", "FOREGROUND"]
+:wq!
+
+$ docker build -t="apache-img" .
+$ docker run -d -p 5001:80 --name=web1 apache-img
+
+# open the same in web browser
+$ ubuntu1404.docker.course:5001
+
+12.6 Docker Networking : Viewing Exposed Ports
+---
+$ docker port web1
+
+$ docker run -d -p 5002:80/udp --name=web2 apache-img
+
+$ docker port web2
+
+$ ip -f inet a
+
+$ docker run -d -p 192.168.56.50:5003:80 --name=web3 apache-img
+
+$ docker port web3
+
+$ vim Dockerfile
+	FROM ubuntu:16.04
+	RUN apt-get update && apt-get install -y iputils-ping traceout apache2
+	EXPOSE 80 500 600 700 800 900
+	ENTRYPOINT ["apache2ctl"]
+	CMD ["-D", "FOREGROUND"]
+:wq!
+
+$ docker build -t="testdocker"
+
+$ docker run -d -P --name=test testdocker
+
+$ docker port throw
+
+12.7 Docker Networking : Linking Containers
+-----------
+$ docker images
+
+$ cat Dockerfile
+	FROM ubuntu:16.04
+	RUN apt-get update && apt-get install -y iputils-ping traceroute apache2
+	EXPOSE 80
+	ENTRYPOINT ["apache2ctl"]
+	CMD ["-D", "FOREGROUND"]
+:wq!
+
+$ docker run --name=src -d img
+$ docker ps
+
+# receiver container
+$ docker run --name=rcvr --link=src:ali-src -it ubuntu:15.04 /bin/bash
+
+$ docker ps
+
+$ docker inspect rcvr
+
+$ docker attach rcvr
+
+$ env
+$ env | grep ALI
+
+$ cat /etc/hosts
+
+12.8 WRAP-Up
+
+13. Troubleshooting:
+
+- Docker Daemon Logging
+- Container Logging
+- Troubleshooting Images
+- Network troubleshooting
+
+13.1 Docker Daemon Logging:
+---
+- debug ( debug + info + error + fatal )
+- info( debug + error + fatal )
+- error( error + fatal )
+- fatal
+
+$ service docker stop
+
+$ docker -d -l debug & 
+$ docker ps
+
+$ vim /etc/default/docker
+	DOCKER_OPTS="--log-level=fatal"
+:wq!
+
+$ ps -ef | grep docker
+$ kill 1733
+
+$ service docker start
+
+$ ps -ef | grep docker
+
+13.2 Troubleshooting : Container Logging
+----------
+- Use volumes to share and persist data
+
+13.4 Troubleshooting : Planning Image Builds
+------
+# Image troubleshooting
+
+# Test before Dockerfile
+
+$ docker run -it --name test ubuntu:16.04 /bin/bash
+
+$ ping 8.8.8.8
+
+$ apt-get install -y iputils-ping
+
+$ apt-get update
+
+$ apt-get install -y iputils-ping
+
+13.5 Image Troubleshooting:
+---
+Intermediate Images:
+
+$ vim Dockerfile
+
+	FROM ubuntu:16.04
+	RUN apt-get update
+	RUN apt-get install -y ping
+	
+	CMD ping 8.8.8.8
+:wq!
+
+$ docker build -t="ping-image" .
+
+$ docker images
+$ docker run -it <<image id>> /bin/bash
+
+13.6 Troubleshooting : The docker0 Bridge
+-----
+Network Troubleshooting: docker0
+
+4 service docker stop
+
+$ ip link del docker0
+
+$ ip a
+
+$ vim /etc/default/docker
+	DOCKER_OPTS=--bip=150.150.0.1/24
+:wq!
+
+$ service docker start
+$ service docker status
+
+$ ip a
+
+$ docker run -it ubuntu:16.04 /bin/bash
+
+$ ip a
+
+13.7 Troubleshooting : IPTables
+--------
+IPTables firewall config in Docker Host
+
+$ --icc =
+$ --iptables=
+## Both default to true
+
+$ iptables -L
+
+$ service docker stop
+
+# Edit the docker config file
+$ vim /etc/default/docker
+	DOCKER_OPTS=--icc=false
+:wq!
+
+$ service docker start
+
+$ iptables -L -v
+
+$ service docker stop
+ Edit the docker config file
+$ vim /etc/default/docker
+	DOCKER_OPTS="--icc=true --iptables=false"
+:wq!
+
+$ service docker start
+
+$ iptables -L -v 
+
+$ docker run -it --name box1 icc-test /bin/bash
+$ docker run -it --name box2 icc-test /bin/bash
+$ docker inspect box1
+# get the ip address
+
+$ docker attach box2
+$ ip
+
+$ ping 172.17.02<<box1 ip address>>
+
+13.8 Troubleshooting : Wrap-up
+---------
+
+
+14. 2 Lightning Fast Recap : Recapping Some of What We've Learned
+-------
+$ docker version
+
+$ docker info
+
+$ docker images
+
+$ docker images --tree
+
+$ docker history img
+
+$ docker pull coreos/etcd
+
+$ docker images
+
+$ docker ps
+
+$ docker ps -a
+
+$ docker start web
+
+$ docker ps
+
+$ vim Dockerfile
+
+$ docker build -t="recap" .
+
+$ docker images
+
+$ docker run -d --name recap recap
+
+15. Next steps:
+---
+
+https://github.com/docker
+
+https://github.com/docker/docker/issues/9015
+
+https://github.com/docker/docker/blob/master/engine/engine.go
+
+## Learn go lang
