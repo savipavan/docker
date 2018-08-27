@@ -1,0 +1,597 @@
+Docker Certified Associate Prep Course
+--------------------------------------
+1.3 Course Syllabus:
+- Introduction to Docker Enterprise
+- Introduction to Docker Swarm
+- Installation and Configuration
+	- Upgrading the docker engine
+	- Selecting a Storage Driver
+	- Complete Docker installation on multiple platforms
+	- Configuring Logging Drivers
+	- Setting Up Swarm(managers)
+	- Setting up swarm ( nodes)
+	- Setting up swarm ( backup schedules )
+	- Manage Users and Teams
+	- Troubleshoot Installation Issues
+	- Sizing the environment
+	- Namespaces: CGroups and Certificates
+	- Authenticate Docker Daemon with Certificates
+	- Configuring Backups
+- Image Creation, Management and Registry
+	- Understanding Dockerfile Options
+	- Docker Structure
+	- Image Efficiencies in Dockerfile
+	- Manage Docker images at the CLI
+	- Tag Images
+	- Using Registries for Image Storage
+	- Understanding Docker Image Layering
+	- Apply Files to Create Docker Images
+	- Modifying a Single Image Layer
+	- Deploy an Image Repository
+	- Configure an Image repository for Use
+	- searching an image Repository
+	- Managing Images in your repository
+	- Deleting Images
+- Orchestration:
+	- Setup a Swarm Cluster
+	- Containers vs Services
+	- Locking a Swarm Cluster
+	- Creating a Swarm  service from a container
+	- Understanding the 'docker inspect' Output
+	- Creating a Stack File Using YAML with 'docker stack deploy'
+	- Working with a Running Service Stack
+	- Increase and Decrease Replica Numbers
+	- Working with Networks and Ports
+	- Working with Volumes
+	- Running Replicated vs Global Services
+	- Troubleshoot Service Deployments
+	- Apply Node Labels for Task Placement
+	- How Dockerized Apps Communicate with Legacy Systems
+	- Why Quorum is Important in a Swarm Cluster
+	- Using Templates with 'docker service create'
+Storage and Volumes:
+	- Graph Drivers on Multiple Platforms
+	- Configuring Devicemapper
+	- Object Storage vs. Block Storage
+	- Application Layers and the Filesystem
+	- Using Volumes for Persistent Storage
+	- Cleaning Up Images on Filesystems and on DTR
+	- Using Storage Across Cluster Nodes
+Networking:
+	- Creating Docker Bridge networks
+	- Troubleshooting Container Connectivity Issues.
+	- Exposing Ports for External Access
+	- Identify IPs for Internal and External Container Interfaces
+	- Understanding Built-In network Drivers
+	- Understanding the Container Network Model.
+	- Configure DOcker for External DNS
+	- Using Docker to Load Balance Web Traffic
+	- Traffic flow between docker components
+	- serviecs on the docker ovarlay network
+	- Host vs Ingress port publishes Modes
+Security:
+	- Singing Docker Images
+	- Complete a security scan on an image
+	- Working with Docker Content trust
+	- Configure RBAC in UCP
+	- Integrate UCP with LDAP/AD
+	- UCP client bundle creation
+	- Docker swarm and Docker Engine Security
+	- MTLS
+	- Identity Policies
+	- UCP Workers vs Managers
+	- Use External Certificate with UCP and DTR
+
+1.4 Lecture: Introduction to Docker Enterprise Edition and Docker Swarm
+---------
+Docker Enterprise Edition: Enterprise development and teams that run business-critical containerzied applications and services in production at large scales.
+
+Provides a support mechanism for issues with the underlysing engine as well as deployment challenges using it.
+
+When using Docker EE on a certified platform, organizations are assured through Docker's certification their applications will work as expected and have support available if they do not.
+
+Enterprise edition comes in Basic, Standard and Advanced tiers.
+
+- Supported Platforms
+
+- Tiers:
+	- Basic: Platform for certified infrastructure, containers and plugins with support from Docker.
+	- Standard: Adds advanced image and container management, LDAP, and RBAC.
+	- Advanced: Adds security scanning and vulnerability monitoring.
+
+- Docker EE - Plan Features and Pricing
+
+- Special Notes:
+	- Docker EE includes:
+		- Docker Engine with support
+		- Docker Trusted registry
+		- Universal Control Plane.
+	- Compatibility:
+		- Docker Engine 17.06+
+		- DTR 2.3+
+		- UCP 2.2+
+		
+- Docker Swarm:
+	Available in the Docker Enterprise Edition(At all tiers), as well as the Docker Community Edition, Docker swarm is a clustering and scheduling tool for clusters of Docker containers(grouped together as services).
+	
+	Swarms allow portability, abstraction, flexibility, and consistency of complex application service deployments on any supported infrastructure.
+	
+	Docker swarm manager(s) are responsible for validating, logging the state of, and distributing instructions to Docker Swarm Workers. 
+	
+	The Docker service(daemon) is installed on every node in a swarm(manager or Worker)
+	
+- Docker Swarm Architecture: 
+	- Managers: Use a consensus algorithm to maintain quorum(requires a min of 2 managers)
+	- Workers: Register with Managers and receive workloads from them.
+	- Services: An application that exists in 1 to N replicas, and hosted across 1 to N workers.
+
+1.5 About the Exam:
+	- Why Take the Exam?
+		- Recognition of your skills by Docker.
+		- Access to the Docker Certified professional network.
+		- Invitation to 'certified only' Docker events.
+		- Container skills are in high demand in DevOps and Cloud-based organizations.
+		
+	- Exam Details:
+		- 80 Minutes to complete
+		- online proctor
+		- 55 multiple choice questions, both single and multiple answer.
+		- $195 fee(no free retakes).
+		- Immediate results
+		- Passing Grade - Variable(not officially published, reported in the 66-70% range)
+		- Will need to use Chrome and install a plugin.
+	
+	- What kind of questions can we expect?
+		- Commands:
+			- Be prepared to read over a command issued and determine what result that command will provide including an error if there is something wrong with it.
+		- Comparative:
+			- Two potential commands may be given, and you may be asked ot identify the difference9s), contrast the output, or indicate if they will produce the same output.
+		- Scenario:
+			- A short scenario will be proposed(one or two sentences). you will be asked to indicate which command in the list would give the desired result.
+		- Definitions:
+			- You may see questions that ask for the most appropriate definition or term within the context of its use in Docker.
+		- Memorization of key commands, options, and configuration file locations is key!
+
+2. Installation and Configuration (15% of Exam)
+---------------
+2.1 Lecture: Complete Docker Installation on Multiple Platforms (CentOS/Red Hat)
+--------
+# centos 7
+
+# check whether docker installed.
+$ yum install -y yum-utils device-mapper-persistent-data lvm2
+
+# add community repo - stable version
+$ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+$ yum update
+
+## for older version, just used to mention the docker command but newever version we had to mention the -ce
+$ yum install docker-ce
+
+$ systemctl enable docker $$ systemctl start docker && systemctl status docker
+
+$ docker images
+
+##check the group for the docker access
+$ ls -al /var/run/docker.sock
+
+# adding non-root user to run commands
+$ usermod -aG docker user
+
+2.2 Lecture: Complete Docker Installation on Multiple Platforms (Debian/Ubuntu)
+--------
+$ apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+# add gpg key
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+#add repository
+$ sudo add-apt-repository "deb [arch=amd64] https://dowonload.docker.com/inux/ubuntu $(lsb_release -cs) stable"
+
+$ apt-get update
+
+$ apt-get install docker-ce
+
+$ systemctl status docker
+
+$ ls -al /var/run/docker.sock
+
+$ usermod -aG docker user
+
+2.3 Lecture: Selecting a Storage Driver
+-------------
+# check the storage driver support
+https://success.docker.com/Policies/Compatability_Matrix
+
+# check the configuration
+# $ docker info
+
+$ docker storage | grep Storage
+
+## Device mapper currently we use in production environment
+
+## Before we change the storage driver, we need to take the back-up of all our images as the images will be deleted automatically when we change the storage driver.
+
+$ cd /etc/docker
+
+$ ls
+
+# Create daemon.json
+$ vi daemon.json
+	{
+		"storage-driver":"devicemapper"
+	}
+
+# restart docker service
+$ systemctl stop docker
+$ systemctl start docker
+
+$ docker images
+
+## In overlay driver all the images and containers would place on
+
+$ cd /var/lib/docker
+
+## in devicemapper all these imaes and containers would be placed on
+
+$ cd devicemapper
+
+$ ll
+
+## pull the centos image
+$ docker pull centos:6
+
+$ docker images
+
+$ cd /var/lib/docker/devicemapper/devicemapper
+
+$ ll
+
+$ docker images
+
+$ docker info | grep Storage
+
+2.4 Lecture: Configuring Logging Drivers (Syslog, JSON-File, etc.)
+---------
+## Run your app in production: Configuring Logging Drivers:
+
+$ https://docs.docker.com/engine/admin/logging/overview/#supported-logging-drivers
+
+# check the logging driver
+$ docker info | grep logging
+
+## we can change the logging driver when we instantiate the container or we can modify in the docker configurations
+
+$ cd /etc/docker
+
+$ ls
+
+$ docker images
+
+$ docker image pull httpd
+
+$ docker images
+
+$ docker container run -d --name testweb httpd
+
+$ docker ps
+
+$ docker container inspect testweb | grep IPAddr
+
+$ yum install -y telnet elinks
+
+$ docker container inspect testweb | grep IPAddr
+
+$ elinks http://172.17.0.2
+
+$ docker ps
+
+$ docker service logs
+
+#check the logs on the container
+$ docker logs testweb
+
+# stop the docker instance
+$ docker stop testweb
+
+# remove the imaege
+$ docker rm testweb
+
+$ pwd
+/etc/docker
+
+# check the syslog installed
+$ cd /etc/
+$ vim rsyslog.config
+	## find the UDP and uncomment those two lines
+	$ModLoad imudp
+	$UDPServerRun 514
+:wq!
+
+$ systemctl start rsyslog
+
+$ systemctl start rsyslog
+
+## Change the logging driver again
+$ vi /etc/docker/daemon.json
+	{
+		"log-driver": "syslog",
+		"log-opts": {
+			"syslog-address": "udp://172.31.125.216:514"
+		}
+	}
+
+$ systemctl start docker
+$ docker info | grep logging
+
+## on the above mentioned server for syslog.
+$ ssh root@172.31.125.216
+
+$ sudo su -
+$ echo "" > /var/log/messages
+$ systemctl restart rsyslog
+
+$ tail -f /var/log/messages
+## <<we can see the logs for the above activity>>
+
+## On docker host - run testweb container
+$ docker container run -d --name testweb -p 80:80 httpd
+
+$ docker ps
+
+## on syslog host
+$ ssh root@172.31.125.216
+$ echo "" > /var/log/messages
+
+## on docker host
+$ curl http://localhost
+
+$ elinks http://localhost
+
+## we can find another 2 logs for the above activity for calling http://localhost
+
+## on docker host
+$ docker logs testweb <<which is not avilable as configuration logging has been shared with another host>>
+
+## configuration loggin per container baseis
+$ docker stop testweb
+$ docker rim testweb
+$ docker container run -d --name testjson --log-driver json-file httpd
+
+$ docker ps
+$ docker logs testjson
+
+2.5 Lecture: Setting Up Swarm (Configure Managers)
+------------
+
+$ docker images
+
+# initialiae the swam
+
+## get the ip address
+$ ipconfig
+<<copy the ip address which is appearing for 'eth0'
+
+$ docker swarm init
+$ docker swarm init --advertise-addr 172.31.16.218
+
+## copy the token which is importent to add the nodes to swarm cluster
+<< docker swarm join --token SWMTKN-1-3t 9dfdkafdsjfadsbkjuv 172.31.16.218:2377
+
+## we will get the same token information
+
+$ docker swarm join-token worker
+
+## if we wanted to add another manger to manage load between the managers
+
+## run the below command to get the token for manager nodes
+$ docker swarm join-token manager
+
+2.6 Lecture: Setting Up Swarm (Add Nodes)
+------------
+# on docker manager, try get the worker node installation url.
+$ docker swarm join-token worker
+# copy the token
+
+## paste the token in node
+
+# On a manager
+$ docker node ls
+
+$ docker system info | grep manager
+
+## past the token in another node
+$ docker node ls
+
+$ docker system info | more
+
+2.7 Lecture: Setting Up a Swarm (Backup and Restore)
+--------
+$ docker images
+
+$ docker node ls
+
+$ docker service create --name backupweb --publish 80:80 --replicas 2 httpd
+
+$ docker service ls
+$ docker service ps backupweb
+
+$ systemctl stop docker
+
+$ cd /var/lib/docker
+
+$ cd swarm
+
+# mkdir /root/swarm
+
+$ cd /root/swarm
+
+$ cp -rf /var/lib/docker/swarm/ .
+
+$ systemctl start docker
+
+$ docker service ls
+
+$ docker service ps backupweb
+
+$ cd /root/swarm
+
+$ tar cvf swarm.tar swarm/
+
+$ ll
+
+$ scp swarm.tar user@192.168.71.2:/home/user
+
+$ systemctl status docker
+
+$ docker service ls
+
+$ systemctl stop docker
+
+# run the below commands on both nodes
+$ sudo systemctl stop docker
+
+## reinitalize the swarm from another server
+$ cd /var/lib/docker
+
+$ docker images
+
+$ ll
+
+$ rm -rf swarm/
+
+$ systemctl stop docker
+
+$ cd /home/user
+
+$ cd tmp/
+
+$ tar xvf ../swarm.tar
+
+$ cd swarm/
+
+$ ll
+
+$ mv swarm/ var/lib/docker
+
+$ systemctl start docker
+
+## Initialize the new cluster
+
+$ docker swarm init --force-new-cluster
+
+$ docker service ls
+
+$ docker service ps backupweb
+
+$ docker service ls
+
+$ docker images
+
+2.8 Lecture: Outline the Sizing Requirements Prior to Installation
+------------
+- It depends... in general, sizing your envoronment for a docker swarm cluster is going to be the same process that you would use for any application in your ecosystem. You would need to consider things like:
+	- CPU, Memory and Disk
+		- Your containerized applicatin will have the same requirement that it would if running on any other infrastructure(physical and virtual). be sure your underlying host(s) have the necessary horsepower.
+	- Concurrency:
+		- What are the load requirements of the application at peak and in total? These will determine optimal placement and the amount of hardware resources(constraints) you need to allocate.
+
+- Universal Control Plane(UCP) system requirements:
+- Breakdown of Manager Nodes for Fault Tolerance
+	- Minimum requirements:
+		- 8gb RAM ( Managers or DTR Nodes )
+		- 4gb RAM ( Workders)
+		- 3gb Free Disk
+	- Recommended Requirements:
+		- 16gb RAM (Managers or DTR Nodes)
+		- 4 vCPUs ( Workers or DTR Nodes )
+- Requirements (UCP, DTR and Docker EE)
+	- Performance Considerations(Timing)
+		- Special Nodes:
+			- Docker EE includes
+				- Docker Engine with Support
+				- Docker Trusted Registry
+				- Universal Control Plane.
+			- Compatibility:
+				- Docker Engine 17.06+
+				- DTR 2.3+
+				- UCP 2.2+
+- Recommendations:
+	- Plan for Load Balancing
+	- Use External Certificate Authority for Production
+
+2.9 Lecture: Set Up and Configure Universal Control Plane (UCP) and Docker Trusted Repository (DTR) for Secure Cluster Management
+-------------------------
+
+# UCP installation
+# make sure cluster created
+$ docker node ls
+
+## Set the DNS before we install UCP instllation
+$ cat /etc/hosts
+
+	192.168.71.81 alearn1004.alearn.net
+	192.168.71.81 ucp.example.com
+	192.168.71.82 alearn1005.alearn.net
+	192.168.71.82 dtr.example.com
+	192.168.71.83 alearn003.alearn.net
+
+# on manager
+$ docker container run --rm -it --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp:2.2.4 install --host-address 172.31.116.158 --interactive
+
+Admin username: admin
+Admin password: Sunday@123
+
+Additional aliases: ucp.example.com
+
+$ docker ps
+
+##check the load on the centos
+$ w
+
+# open the url in browser
+$ https://ucp.example.com
+
+## Login and activate the trail license
+
+$ admin settings --> Docker Trusted registry --> UCP Node: <<select the node which created with alias>> --> Disable TLS verification for UCP 
+
+( or )
+
+$ docker run -it --rm docker/dtr install --ucp-node alearn105.alearn.net.com --ucp-username admin --ucp-url https://alearn4.alearn.net --ucp-insecure-tls
+
+$ docker ps
+
+## on 3rd node in the cluster
+$ https://dtr.example.com/repositories
+
+$ ipconfig eth0
+
+2.9 Lecture: Complete Backups for UCP and DTR
+------
+$ docker container run --log-driver non --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp backup > backup.tar
+
+## COPY THE ID and mention the id which recieved in the above error
+
+$ docker container run --log-driver non --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp backup --id m789bakdfjdjf7 > backup.tar
+
+$ ls
+
+$ tar tvf backup.tar
+
+## restore - we need to run the same command but 2 parametes needs to be changed
+
+$ docker container run --log-driver none --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp restore --id m78adsdsafdyi < backup.tar
+
+$ mv backup.tar ucp-backup-1224465..tar
+
+## on dtr server
+$ docker run -i --rm docker/dtp backup --ucp-insecure-tls --ucp-url https://alearn444.alearncom:443 --ucp-username admin --ucp-password Sunday@123 > dtr-backup.tar
+
+$ ls -al
+
+$ tar tvf dtr-backup.tar | more
+
+## restoring the backup of dtr
+$ docker run -i --rm docker/dtp restore --ucp-insecure-tls --ucp-url https://alearn444.alearncom:443 --ucp-username admin --ucp-password Sunday@123 < dtr-backup.tar
