@@ -595,3 +595,285 @@ $ tar tvf dtr-backup.tar | more
 
 ## restoring the backup of dtr
 $ docker run -i --rm docker/dtp restore --ucp-insecure-tls --ucp-url https://alearn444.alearncom:443 --ucp-username admin --ucp-password Sunday@123 < dtr-backup.tar
+
+***********
+3. Image Creation, Management, and Registry (20% of Exam)
+-----------
+$ docker images
+
+$ docker pull hello-world
+
+# download all tags for hello-world program
+$ docker pull -a hello-world
+$ docker images
+
+$ docker pull --disable-content-trust hello-world
+
+$ docker images
+
+$ docker run hello-world
+
+$ docker images
+
+$ docker images --all
+
+$ docker images --digests
+
+# use filter
+$ docker pull centos:6
+
+$ docker images
+
+# show the images which downloaded before centos:7
+$ docker images --filter "before=centos:7"
+
+$ docker images --no-trunc
+
+$ docker images centos:7
+
+$ docker images -q
+
+3.2 Lecture: Searching an Image Repository
+--------
+$ docker search apache
+
+$ docker search apache | wc -l
+
+$ docker search --filter stars=50 apache
+
+# search with the official filter
+$ docker search --filter stars=50 --filter is-official=true apache
+
+$ docker search --limit 10 apache
+
+3.3 Lecture: Tag an Image
+------------
+$ docker images
+
+$ docker tag centos:7 pavanceentos:v1
+
+$ docker rmi centos:7
+$ docker images
+$ docker rmi pavancentos:v1
+
+$ docker images
+$ docker pull centos:7
+
+$ docker tag centos:7 pavancentos:ver2
+
+$ docker images
+
+3.4 Lecture: Use CLI Commands to Manage Images (List, Delete, Prune, RMI, etc)
+--------
+$ docker image --help
+
+$ docker image history <<imagename"
+$ docker image history pavancentos:ver2
+
+$ docker images
+
+$ docker image save pavancentos:ver2 > pavancentos.custom.tar
+
+# remove the image from system
+$ docker image rmi pavancentos:ver2
+
+$ docker images
+
+$ ls -al
+
+$ ls -al *.tar
+
+$ tar tvf pavanceentos.custom.tar
+
+$ docker import pavanceentos.custom.tar pavanlocal:centos7
+
+$ docker images
+
+$ docker load --input pavanceentos.custom.tar
+
+$ docker images
+
+$ docker image ls
+
+$ docker image prune
+
+$ docker image prune -a
+
+$ docker image tag
+
+3.5 Lecture: Inspect Images and Report Specific Attributes Using Filter and Format
+-----------
+$ docker image inspect pavancentos:ver2
+
+$ docker image inspect pavancentos:ver2 > centos6.output
+
+$ cat centos.output
+
+$ docker image inspect centos:6 --format '{{.ContainerConfig.Hostname}}'
+
+$ docker image inspect centos:6 --format '{{.ContainerConfig.StdinOnce}}'
+
+$ docker image inspect centos:6 --format '{{.ContainerConfig}}'
+
+$ docker image inspect centos:6 --format '{{json.ContainerConfig}}'
+
+$ docker images
+
+$ docker image inspect centos:6 --format '{{.RepoTags}}'
+
+$ docker tag centos:6 anothercentos:6
+
+$ docker image inspect centos:6 --format '{{.RepoTags}}'
+
+3.6 Lecture: Container Basics - Running, Attaching to, and Executing Commands in Containers
+--------
+$ docker images
+
+$ docker ps
+
+$ docker ps -a
+
+$ docker images
+
+$ docker run centos:6
+
+$ docker ps
+
+$ docker ps -a
+
+$ docker images
+
+$ docker run -it centos:6
+
+$ ls -al
+
+$ exit
+
+$ docker ps -a
+
+$ docker images
+
+$ docker run -it --name testcontainer centos:7 /bin/bash
+
+$ exit
+
+$ docker ps -a
+
+$ docker restart testcontainer
+
+$ docker run -it --name testcontainer centos:7 /bin/bash
+
+$ docker rm kind_boyd
+
+$ docker rm 'docker ps -a -q'
+
+$ docker ps -a 
+
+$ docker run -it --rm --name testcontainer1 centos:7 /bin/bash
+
+$ docker ps -a
+
+$ docker run -t --rm --env myvar=whatever --name testcontainer centos:7 /bin/bash
+
+$ echo $myvar
+
+$ docker run -t --rm --env myvar=whatever --env myvar2=something --name testcontainer centos:7 /bin/bash
+
+$ echo $myvar
+$ echo $myvar2
+
+$ docker ps -a
+
+$ docker run -d testcontainer centos:7
+
+$ docker ps -a
+
+$ docker pull httpd
+
+$ docker run -d httpd
+
+$ docker attach 
+(or)
+$ docker exec -it vigilant_goldwasser /bin/bash
+
+3.7 Lecture: Create an Image with Dockerfile
+------------
+$ docker images
+
+$ mkdir Dockerfiles
+
+$ vim Dockerfile
+# This is a small test Dockerfile
+	FROM centos:latest
+	LABEL maintainer="savipavan@gmail.com"
+	
+	RUN yum update -y
+
+:wq!
+
+$ docker images
+
+$ docker build -t customimage:v1 .
+
+$ docker image
+
+$ docker build -t customimage:v1 .
+# It uses cache so it wont take much time
+
+# update the image
+$ vim Dockerfile
+	FROM centos:latest
+	LABEL maintainer="savipavan@gmail.com"
+	
+	RUN yum update -y
+	RUN whoami
+
+:wq!
+
+$ docker build -t customimage:v1 .
+
+$ docker image
+
+$ docker build -t customimage:v1 .
+# It uses cache so it wont take much time
+
+$ cp Dockerfile Dockerfile2
+
+$ vim Dockerfile
+$ docker build -t customubuntu:v1 -f Dockerfile2
+
+$ docker images
+
+$ docker build - < Dockerfile2
+
+$ docker build --pull --no-cache --squash -t optimized:v1 .
+
+$ docker build --pull --no-cache -t optimized:v1 .
+
+$ docker images
+
+3.8 Lecture: Dockerfile Options, Structure, and Efficiencies (Part I)
+-----------
+$ cd Dockerfiles/
+
+$ ll
+
+$ rm  *
+
+## Dockerfile -- Options and Structure
+
+FROM
+	<image>[AS<name>]
+	<image>[:<tag>[AS<name>]
+ARG
+	VARIABLE_NAME=[value]
+	FROM base:${VARIABLE_NAME}
+RUN 
+	<command>(shell form -/bin/sh -c)
+	["command","parm1","param2"](exec form,JSON)
+CMD
+	["command","parm1","param2"](exec form,JSON)
+	["param1","param2"](
+
+$ vim Dockerfile
+
