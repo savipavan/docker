@@ -1,0 +1,1371 @@
+Docker Certified Associate Prep Course
+----------
+Terry Cox - 20 Years Experience - Docker in Production
+Exam Objectives:
+- Installation and confiration
+- Image creation and mgmt
+- Storage
+- Networking
+
+Linux CLI + Use Docker for SixMonths
+
+2. Lecture: Introduction to Linux Academy - Getting the Most Out of Your Experience
+-----------
+
+3. Lecture: Course Syllabus
+-------
+- About the Course Author
+- About the Exam
+- Introduction to Docker Enterprise
+- Introduction to Docker Swarm
+
+Installation and Configuration
+----
+- Upgrading the Docker Engine
+- Selecting a Storage Driver
+- Complete Docker Installation on Multiple Platforms
+- Configuring Logging Drivers
+- Setting Up Swarm(Managers)
+- Setting Up Swarm(backup Schedules)
+- Manage Users and Teams
+- Troubleshoot Installation Issues
+- Sizing your environment
+- Namespaces, CGroups and Certificates
+- Authenticate Docker Daemon with Certificates
+- Configuring Backups
+
+Image Creation, Management and Registry:
+-----
+- Understanding Dockerfile options
+- Dockerfile Structure
+- Image efficiencies in Dockerfile
+- Manage Docker Images at the CLI
+- Tag Images
+- Using Registries for Image Storage
+- Understanding Docker Image Layering
+- Apply files to Create Docker Images
+- Modifying a Single Image Layer
+- Deploy an Image Repository
+- Configure an Image Repository for Use
+- Searching an Image Repository
+- Managing Images in Your Repository
+- Deleting Images
+
+Orchestration:
+----
+- Setup an Swarm Cluster
+- Container vs. Services
+- Locking a Swarm Cluster
+- Creating a Swarm service from a container
+- Understanding the 'docker inspect' Output
+- Creating a Stack File using YAML with 'docker stack deploy'
+- Working with a Running Service Stack
+- Increase and Decrease Replica Numbers
+- Working with Networks nand Ports
+- Working with Volumes
+- Running Replicated vs. Global Services
+- Troubleshoot Service Deployments
+- Apply Node Labels for Task Placement
+- How Dockerized Apps Communicate with Legacy Systems
+- Why Quorum is important in a Swarm Cluster
+- Using template with 'docker service create'
+
+Storage and Volumes:
+----
+- Graph Drivers on Multiple Platforms
+- Configuring Devicemapper
+- Object Storage vs. block storage
+- Application Layers and the Filesystem
+- Using Volumes for persistent storage
+- Cleaning Up images on filesystems and on DTR
+- Using Storage Across Cluster nodes
+
+Networking:
+-----
+- Creating Docker Bridge networks
+- Troubleshooting Container Connectivity Issues
+- Exposing Ports for External Access
+- Identify IPS for Internal and External Container Interfaces
+- Understanding Built-In Network Drivers
+- Understanding the Container Network Model
+- Configure Docker for External DNS
+- Using Docker to Load Balance Web Traffic
+- Traffic Flow between Docker components
+- Services on the docker overlay network
+- Host vs. Ingress Port Publishes Modes
+
+Security:
+---
+- singing docker images
+- Complete a Security scan on an image
+- WOrking with Docker COntent trust
+- Configure RBAC in UCP
+- Integrate UCP with LDAP/AD
+- UCP Client Bundle Creation
+- Docker Swarm and Docker Engine Security
+- MTLS
+- Identify Policies
+- UCP Works vs Managers
+- Use external certificates with UCP and DTR
+
+4. Lecture: Introduction to Docker Enterprise Edition and Docker Swarm
+---------
+- Enterprise development and teams that run business-critical containerized applications and services in production at large scales.
+- provides a support mechanism for issues with the underlaying engine as well as deployment challenges using it.
+- When using Docker EE on a certified platform, organizations are assured through Docker's certification that their applications will work as expected and have support available if they do not.
+- EE comes up with Basic, Standard and Advanced Tiers
+
+Supported Platforms:
+- CentOS, Debian, Fedora
+
+- Basic: Platform for certified infrastructure, containers and plugins with support from Docker
+- Standard: Adds advanced image and container management, LDAP and RBAC
+- Advanced: Adds security scanning and vulnerability monitoring
+
+Docker EE- Plan Features and Pricing:
+
+Special Notes:
+- Docker EE Includes:
+	- Docker Engine with support.
+	- Docker Trusted registry.
+	- Universal Control Plane.
+- Compatibility:
+	- Docke Engine 17.06+
+	- DTR 2.3+
+	- UCP 2.2+
+
+Docker Swarm:
+Available in the Docker Enterprise Edition (at all tiers), as well as the Docker Community Edition,
+
+Docker Swarm is a clustering and scheduling tool for clusters of Docker containers (grouped
+together as services).
+
+Swarms allow portability, abstraction, flexibility, and consistency of complex application service
+
+deployments on any supported infrastructure.
+Docker Swarm Manager(s) are responsible for validating, logging the state of, and distributing
+instructions to Docker Swarm Workers. The Docker service (daemon) is installed on every node in
+a Swarm (Manager or Worker).
+
+Basic Swarm Architecture
+---
+Managers
+• Use a consensus algorithm to
+maintain quorum (requires a min.
+of 2 managers).
+Workers
+• Register with Managers and receive
+workloads from them.
+Services
+• An application that exists in 1 to N
+replicas, and hosted across 1 to N
+Workers.
+
+5. Lecture: About the Exam
+----------
+Why Take the Exam?
+• Recognition for your skills by Docker.
+• Access to the Docker Certified Professional Network.
+• Invitation to ‘Certified Only’ Docker events.
+• Container skills are in high demand in DevOps and Cloud-based organizations
+
+Exam Details
+• 80 Minutes to complete.
+• Online proctor.
+• 55 Multiple Choice questions, both single and multiple answer.
+• $195 fee (no free retakes).
+• Immediate results.
+• Passing Grade – Variable (not officially published, reported in the 66-70% range).
+• Will need to use Chrome and install a plugin.
+
+What kind of questions can you expect?
+• Commands
+• Be prepared to read over a command issued and determine what result that command will provide,
+including an error if there is something wrong with it.
+• Comparative
+• Two potential commands may be given, and you may be asked to identify the difference(s), contrast the
+output, or indicate if they will produce the same output.
+• Scenario
+• A short scenario will be proposed (one or two sentences). You will be asked to indicate which command
+in the list would give the desired result.
+• Definitions
+• You may see questions that ask for the most appropriate definition or term within the context of its use
+in Docker.
+Memorization of key commands, options, and configuration file locations is key!
+
+***********
+Installation and Configuration (15% of Exam)
+************
+1. Lecture: Complete Docker Installation on Multiple Platforms (CentOS/Red Hat)
+--------
+- Do not have Docker installed
+- Fresh Installation
+
+$ yum install -y yum-utils device-mapper-persistent-data lvm2
+
+$ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo --enable
+
+$ yum update
+
+$ yum install docker-ce
+
+$ systemctl enable docker && systemctl start docker && systemctl status docker
+
+$ docker images
+
+# if we get permision error, then we need to add user to docker group to get the permissios on
+
+$ cd /var/run
+$ ls -al docker.sock
+
+$ usermod -aG docker user
+$ docker images
+
+2. Lecture: Complete Docker Installation on Multiple Platforms (Debian/Ubuntu)
+--------
+$ apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+$ apt-get update
+$ apt-get install docker-ce
+
+$ systemctl status docker
+
+$ ls -al docker.sock
+
+$ docker images
+
+3. Lecture: Selecting a Storage Driver
+-----------
+- Pluggable Architecture
+
+$ docker info
+
+$ docker info | grep Storage
+
+$ cd /etc/docker
+
+$ ll
+
+$ vi daemon.json
+{
+	"storage-driver":"devicemapper"
+}
+
+:wq!
+
+# restart daemon to apply the changes
+$ systemctl restart docker
+
+$ docker images
+
+$ cd /var/lib/docker
+$ cd devicemapper
+
+$ docker pull centos:6
+
+$ docker images
+
+$ ll
+
+$ docker images
+
+$ docker info | grep Storage
+
+4. Lecture: Configuring Logging Drivers (Syslog, JSON-File, etc.)
+-----------
+# check docker docs for supported logging drivers
+
+$ docker info | grep Logging
+$ cd /etc/docker
+
+$ ll
+
+$ docker image pull httpd
+
+$ docker images
+
+$ docker container run -d --name testweb httpd
+
+$ docker ps
+
+$ docker container inspect testweb | grep IPAddr
+
+$ yum install -y telnet elinks
+
+$ elinks http://172.17.0.2
+
+$ docker ps
+$ docker logs testweb
+
+$ docker stop restweb
+$ docker rm testweb
+
+# check whether syslog has installed or not
+$ cd /etc/
+$ vim rsyslog.conf
+
+# Uncheck the below lines
+$ModLoad imudp
+$UDPServerRun 514
+
+$ systemctl start rsyslog
+$ systemctl status rsyslog
+
+$ cd docker
+$ vim daemon.json
+{
+	"log-driver":"syslog",
+	"log-opts":{
+		"syslog-address":"udp://172.31.125.216:514"
+	}
+}
+
+$ systemctl start docker
+
+$ docker info| grep Logging
+
+# Connect to the server which wemention daemon.json
+$ ssh <<172.31.125.216>>
+
+# clear all the messages
+$ echo "">/var/log/messages
+
+$ systemctl restart rsyslog
+
+$ tail -f /var/log/messages
+#We can see that service starts
+
+# come back to our Docker installed server
+$ docker container run -d --name testweb -p 80:80 httpd
+
+$ curl http://localhost
+
+# on another system- will see the logs starts with "GET /HTTP 1.1
+
+# docker logs testweb not available as we configured syslog
+$ docker logs testweb
+
+$ docker stop testweb
+$ docker rim testweb
+
+$ docker container run -d --name testson --log-driver json-file
+
+$ docker logs testjson
+
+5. Lecture: Setting Up Swarm (Configure Managers)
+----------
+$ docker images
+
+$ docker swarm init
+
+# copy ipaddress
+$ ifconfig
+
+$ docker swarm init --advertise-addr <IPAddress>
+# Copy the token command
+
+#Display the token for worker
+$ docker swarm join-token worker
+
+#Display the token for manager
+$ docker swarm join-token manager
+
+6. Lecture: Setting Up Swarm (Add Nodes)
+----------
+# login to another server
+$ docker swarm join-token worker
+
+# on manager
+$ docker node ls
+
+7. Lecture: Setting Up a Swarm (Backup and Restore)
+-----------
+$ docker images
+
+$ docker node ls
+
+$ docker service create --name bkupweb -p 80:80 --replicas 2 httpd
+$ docker service ls
+
+$ docker service ps bkupweb
+
+$ systemctl stop docker
+
+$ sudo su
+
+$ cd /var/lib/docker
+
+$ cd swarm
+
+
+$ ll
+# Backup the directory
+
+$ mkdir /root/swarm
+$ cd /root/swarm
+$ cp -rf /var/lib/docker/swarm/ .
+$ ll
+
+$ systemctl start docker
+
+$ docker service ls
+$ docker service ps bkupweb
+
+$ cd /root/swarm
+
+# create a tar file
+$ tar cvf swarm.tar swarm/
+
+$ ll
+
+# Copy the file to the node which is not a member
+
+$ scp swarm.tar user@tcox6:/home/user
+
+$ systemctl status docker
+$ systemctl status docker
+
+# Stop docker daemon on all servers
+$ systemctl stop docker # all nodes
+
+# login to tcox6
+$ cd /var/lib/docker
+
+$ cd /var/lib/docker
+# remove swarm directory
+$ rm -rf swarm/
+
+$ cd /home/user
+
+$ mkdir tmp/
+$ cd tmp/
+$tar xvf ../swarm.tar
+$ ll
+
+$ mv swarm/ /var/lib/docker
+
+$ systemctl start docker
+
+$ docker swarm init --force-new-cluster
+
+$ docker service ls
+
+$ docker service ps bkupweb
+
+8. Lecture: Outline the Sizing Requirements Prior to Installation
+----
+Cluster Sizing Requirements:
+It depends… in general, sizing your environment for a Docker Swarm Cluster is going to be the
+same process that you would use for any application in your ecosystem. You would need to
+consider things like:
+• CPU, Memory and Disk
+• Your containerized application will have the same requirements that it would if running on any
+other infrastructure (physical or virtual). Be sure your underlying host(s) have the necessary
+horsepower.
+• Concurrency
+• What are the load requirements of the application at peak and in total? These will determine
+optimal placement and the amount of hardware resources (constraints) you need to allocate.
+
+Universal Control Plane (UCP) System Requirements:
+Breakdown of Manager Nodes for Fault Tolerance
+Minimum Requirements
+• 8gb RAM (Managers or DTR
+Nodes)
+• 4gb RAM (Workers)
+• 3gb Free Disk
+Recommended Requirements
+• 16gb RAM (Managers or DTR
+Nodes)
+• 4vCPUs (Workers or DTR Nodes)
+• 25-100gb Disk Space
+
+Requirements (UCP, DTR and Docker EE)
+Performance Considerations (Timing)
+
+Special Notes
+• Docker EE includes
+• Docker Engine with Support
+• Docker Trusted Registry
+• Universal Control Plane
+• Compatibility
+• Docker Engine 17.06+
+• DTR 2.3+
+• UCP 2.2+
+
+Recommendations
+• Plan for Load Balancing
+• Use External Certificate Authority for Production
+
+9. Lecture: Set Up and Configure Universal Control Plane (UCP) and Docker Trusted Repository (DTR) for Secure Cluster Management
+------------------
+# Beyond the scope
+
+$ docker node ls
+
+https://docs.docker.com/ee/ucp/admin/install/#step-4-install-ucp
+
+$ docker container run --rm -it --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp:3.1.0 install --host-address <<Internal IP: 172.31.116.158>> --interactive 
+
+$ docker container run --rm -it --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp:3.1.0 install --host-address 192.168.71.188 --interactive 
+
+
+#add host entries before we run the above command
+$ cat /etc/hosts
+172.31.116.158 tcox4.mylabserver.com
+172.31.116.158 ucp.example.com
+172.31.122.18 tcox5.mylabserver.com
+172.31.122.18 dtr.example.com
+172.31.16.174 tcox6.mylabserver.com
+
+Admin username: admin
+Password: Sunday@123
+
+Additional aliases: ucp.example.com
+
+$ docker ps
+
+# check the load
+$ w
+
+# connect to our servers:
+https://ucp.example.com/login/
+- get free trail or license
+
+# get the license for 30 day trail for store.docker.com
+
+Admin settings --> Docker Trusted Registry:
+
+UCP NODE:
+# on dtp installation
+$ docker run -it --rm docker/dtr install --ucp-node tcox5.mylabserver.com --ucp-username admin --ucp-url https://tcox4.mylabserver.com --ucp-insecure-tls
+ucp-password:
+
+
+$ docker ps
+
+# on 3rd node:
+$ docker images
+
+https://connect to our dtr
+https://dtr.example.com/repositories
+
+# ifconfig eth0
+
+9. Lecture: Complete Backups for UCP and DTR
+-----------
+on UCP server
+$ docker container run --log-driver non --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp backup > backup.tar
+
+# If it fails, passon id
+$ docker container run --log-driver none --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp backup --id <<paste the id>> > backup.tar
+
+
+$ tar tvf backup.tar | more
+
+#restore the file
+$ docker container run --log-driver none --rm -i --name ucp -v /var/run/docker.sock:/var/run/docker.sock docker/ucp restore --id <<paste the id>> < restore.tar
+
+# move the backup to another location
+$ mv backup.tar ucp-backup-12242017.tar
+
+
+## Move to DTR server
+$ docker run -i --rm docker/dtp backup --ucp-insecure-tls --ucp-url https://tcox4.mylabserver.com:443 --ucp-username admin > dtr-backup.tar
+
+# If error prompts then we need to pass the UCP password
+$ docker run -i --rm docker/dtp backup --ucp-insecure-tls --ucp-url https://tcox4.mylabserver.com:443 --ucp-username admin --ucp-password password > dtr-backup.tar 
+
+$ ls -la
+
+$ tar tvf dtr-backup.tar
+
+$ docker run -i --rm docker/dtp restore --ucp-insecure-tls --ucp-url https://tcox4.mylabserver.com:443 --ucp-username admin --ucp-password password < dtr-backup.tar 
+
+# During the backup DTR would be offline
+
+10. Lecture: Create and Manage UCP Users and Teams
+-----------
+Going to create users and teams in UCP dashboard
+
+user management --> user --> create user --> username, password, full name --> 
+
+
+user management: --> Create organization --> qa-dept --> Create a team --> container-testers --> create
+
+view users
+
+11. Lecture: Namespaces and CGroups
+----------
+Docker and Namespaces
+Namespaces provide ‘isolation’ so that other pieces of the system remain unaffected by whatever is
+within that namespace.
+Docker uses namespaces of various kinds to provide the isolation that containers need in order to
+remain portable and refrain from affecting the remainder of the host system.
+Namespace Types
+• Process ID
+• Mount
+• IPC
+• User (currently experimental support for)
+• Network
+
+Docker and Control Groups (cgroups)
+
+Control Groups provide resource limitation and reporting capability within the container space.
+They allow granular control over what host resources are allocated to the container(s) and when
+they are allocated.
+Common Control Groups
+• CPU
+• Memory
+• Network Bandwidth
+• Disk
+• Priority
+
+*************
+Image Creation, Management, and Registry (20% of Exam)
+*************
+2.1 Lecture: Pull an Image from a Registry (Using Docker Pull and Docker Images)
+-----------
+$ docker images
+
+$ docker pull hello-world
+
+$ docker pull -a hello-world
+
+$ docker images
+
+$ docker pull --disable-content-trust hello-world
+
+$ docker run hello-world
+
+$ docker images
+
+$ docker images --all
+
+$ docker images -digests
+
+# Filter
+$ docker pull centos:6
+
+$ docker images
+
+$ docker images --filter "before=centos:6"
+
+$ docker images --no-trunc
+$ docker images
+
+$ docker images centos:6
+
+$ docker images -q
+
+2.2 Lecture: Searching an Image Repository
+------------
+$ docker search apache
+
+$ docker search apache | wc -l 
+
+$ docker search --filter stars=50 apache
+
+$ docker search --filter stars=50 apache --filter is-official=true apache
+
+$ docker search --limit 10 apache
+
+2.3 Lecture: Tag an Image
+------------
+$ docker images
+
+$ docker tag centos:6 mycentos:v1
+
+$ docker images
+
+$ docker rmi centos:6
+
+$ docker images
+
+$ docker rmi mycentos:v1
+
+$ docker images
+
+$ docker pull centos:6
+
+$ docker images
+
+$ docker tag centos:6 myrepo/mycentos:ver2
+
+2.4 Lecture: Use CLI Commands to Manage Images (List, Delete, Prune, RMI, etc)
+-----------------------
+$ docker image
+
+$ docker image history
+$ docker image history myrepo/mycentos:ver2
+
+$ docker image save myrepo/mycentos:ver2 > mycentos.custom.tar
+
+$ docker images
+
+$ docker rmi myrepo/mycentos:ver2
+
+$ docker images
+
+$ ls -al
+
+$ ls -al *.tar
+
+$ tar tvf mycentos.custom.tar | more
+
+$ docker import mycentos.custom.tar localimport:centos6
+
+$ docker images
+
+$ docker load --input mycentos.custom.tar
+
+$ docker images
+
+$ docker image ls
+
+$ docker image prune
+
+$ docker image prune -a
+
+$ docker image tag
+
+2.4 Lecture: Inspect Images and Report Specific Attributes Using Filter and Format
+----------
+$ docker image inspect centos:6
+
+$ docker image inspect centos:6 > centos6.output
+
+$ docker image inspect centos:6 | grep ContainerConfig
+
+$ docker image inspect centos:6 --format '{{.ContainerConfig.hostname}}'
+
+$ docker image inspect centos:6 --format '{{.ContainerConfig.StdinOnce}}'
+
+# Everyting under container config
+$ docker image inspect centos:6 --format '{{.ContainerConfig}}'
+
+$ docker image inspect centos:6 --format '{{json .ContainerConfig}}'
+
+$ docker images
+
+$ docker image inspect centos:6 --format '{{.RepoTags}}'
+
+$ docker tag centos:6 anothercentos:6
+
+$ docker image inspect centos:6 --format '{{.RepoTags}}'
+
+2.5 Lecture: Container Basics - Running, Attaching to, and Executing Commands in Containers
+-------------
+
+$ docker images
+
+$ docker ps
+
+$ docker ps -a
+
+$ docker images
+
+$ docker run centos:6
+
+$ docker ps -a 
+
+$ docker run -it centos:6
+
+$ ls -al
+$ exit
+
+$ docker ps
+
+$ docker images
+
+$ docker run -it --name testcontainer centos:6 /bin/bash
+
+$ docker ps -a
+
+# we cannot use the same name
+$ docker ps -a
+
+$ docker rm 'docker ps -a -q'
+
+$ docker ps -a
+
+$ docker run -it --rm --name testcontainer centos:6 /bin/bash
+
+$ docker ps
+
+$ docker ps -a
+
+$ docker run -it --rm  --env MYVAR=whatever --name testcontainer centos:6 /bin/bash
+
+$ echo $MYVAR
+
+$ docker ps -a 
+
+# Run the container in Detach mode
+
+$ docker run -d --rm  --env MYVAR=whatever --name testcontainer centos:6 /bin/bash
+
+$ docker ps
+
+$ docker run -d --name testcontainer centos:6
+
+$ docker ps -a 
+
+$ docker run -d httpd
+
+$ docker exec -it httpd /bin/bash 
+
+2.7 Lecture: Create an Image with Dockerfile
+------------
+$ docker images
+
+$ mkdir Dockerfiles
+
+$ vim Dockerfile
+	# this is test file
+	FROM centos:latest
+	LABEL maintainer=pavan@gmail.com"
+	
+	RUN yum update -y
+:wq!
+
+$ docker images
+
+$ docker build -t customimage:v1 .
+
+$ docker images
+
+$ docker build -t customimage:v1 .
+
+$ vim Dockerfile
+	# this is test file
+	FROM centos:latest
+	LABEL maintainer=myname@gmail.com"
+	
+	RUN yum update -y
+	
+$ docker images
+
+$ cp Dockerfile Dockerfile2
+
+$ docker build -t cutombubuntu:v1 -f Dockerfile2 .
+
+$ docker images
+
+$ docker build . <Dockerfile2>
+
+$ docker build --pull --no-ache --squash -t optimized:v1 .
+
+$ docker build --pull --no-ache -t optimized:v1 .
+
+$ docker images
+
+7.8 Lecture: Dockerfile Options, Structure, and Efficiencies (Part I)
+----------------------
+$ cd Dockerfiles/
+
+$ rm *
+
+PDF: Dockerfile - Pieces, parts and Optimization
+
+7.11 Lecture: Describe and Display How Image Layers Work
+-------------
+$ docker images
+
+$ docker image history mybuild:v1
+
+# it is using union file system
+
+$ docker history mybuild:v3 --no-truc
+
+$ docker images mybuild:v3
+
+7.12 Lecture: Modify an Image to a Single Layer
+-------------
+$ docker images
+
+$ docker image history mybuild:v4
+
+$ docker ps -a 
+
+$ docker images
+
+$ docker run mybuild:v4
+
+$ docker export <<container id > mybuild4.tar
+
+$ docker import mybuild4.tar mybuild:importv5
+
+$ docker images
+$ docker image history mybuild:importv5
+$ docker image history mybuild:v4
+
+
+7.13 Lecture: Selecting a Docker Storage Driver
+------------
+$ docker info
+
+$ docker info | grep Storage
+
+$ cd /etc/docker
+
+$ vi daemon.json
+{
+	"storage-driver":"devicemapper"
+}
+
+$ docker images
+
+$ systemctl stop docker
+$ systemctl start docker
+
+$ cd/var/lib/docker
+$ ll
+
+$ cd devicemapper/
+$ ll
+$ docker pull centos:6
+
+$ ll
+
+$ docker images
+
+7.14 Lecture: Prepare for a Docker Secure Registry
+-------------
+$ mkdir certs
+$ mkdir auth
+
+$ openssl req -newkey rsa:4096 -nodes -sha256 -keyout certs/dockerrepo.key -x509 -days 365 -out certs/dockerrepo.crt -subj CN=myregistrydomain.com
+
+$ ls -al certs
+
+$ ifconfig
+
+$ echo "<ipaddress> myregistrydomain.com" >> /etc/hosts
+
+$ mkdir -p /etc/docker/certs.d/myregistrydomain.com:5000
+
+$ ll
+
+$ cp /home/usr/certs/dockerrepo.crt ca.crt
+
+$ ll
+
+$ docker images
+$ docker pull registry:2
+
+$ docker images
+
+$ docker run --entrypoint htpasswd registry:2 -Bbn test password > auth/htpasswd
+
+$ cat htpasswd
+
+7.15 Lecture: Deploy, Configure, Log Into, Push, and Pull an Image in a Registry
+----------------------
+$ docker images
+$ docker container
+$ docker run -d -p 5000:5000 -v 'pwd' /certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/dockerrepo.crt -e REGISTRY_HTTP_TLS_KEY=/certs/dockerrepo.key -v 'pwd' /auth:/auth -e REGISTRY_AUTH=htpasswd -e REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd registry:2
+
+$ docker ps
+
+$ docker images
+
+$ docker pull busybox
+
+$ docker tag busybox myregistrydomain.com:5000:/my-busybox
+
+$ docker push myregistrydomain:5000/my-busybox
+
+$ docker login myregistrydomain.com:5000/my-busybox
+
+$ docker push myregistrydomain:5000/my-busybox
+
+$ docker images
+$ docker rmi busybox
+
+$ docker rmi myregistrydomain.com:5000/my-busybox
+
+$ docker images
+
+$ docker ps
+
+$ docker pull myregistrydomain.com:5000/my-busybox
+
+$ docker images
+
+7.16 Lecture: Managing Images in Your Private Repository
+-------------
+$ docker images
+
+$ docker ps
+
+$ curl --insecure -u "test:passwd" https://myregistrydomain.com:5000/v2/_catalog
+
+$ docker images
+
+$ docker tag centos:6 myregistrydomain.com:5000/my-centos
+
+$ docker login myregistrydomain.com:5000
+
+$ docker push myregistrydomain.com:5000/my-centos
+
+$ docker images
+
+$$ curl --insecure -u "test:passwd" https://myregistrydomain.com:5000/v2/_catalog
+
+$ wget --no-check-certificates --http-user=test --http-password=password https://myregistrydomain.com:5000/v2/_catalog
+
+$ ll
+
+$ cat _catalog.1
+
+$ curl --insecure -u "test"password" https://myregistrydomain:5000/v2/my-busybox/tags/lit
+
+
+$ curl --insecure -u "test"password" https://myregistrydomain:5000/v2/my-busybox/manifest/
+
+7.17 Lecture: Container Lifecycles - Setting the Restart Policies
+------------
+$ docker image pull httpd
+
+$ docker images
+
+$ docker run -d --name testweb httpd
+
+$ docker ps
+
+$ docker stop testweb
+$ docker start testweb
+
+$ sudo systemctl restart docker
+
+$ docker ps -a 
+
+$ docker rm  testweb
+
+$ docker container run -d --name testweb --restart always httpd
+
+$ docker ps -a
+
+$ systemctl restart docker
+
+$ docker ps
+
+$ docker stop testweb
+
+$ systemctl restart docker
+
+$ docker ps
+
+$ docker stop testweb
+
+$ docker container run -d --name testweb httpd
+
+$ docker ps
+
+$ docker stop testweb
+
+$ docker rm testweb
+$ docker container run -d --name testweb httpd
+
+$ docker container run -d --name testweb --restart unless-stopped httpd
+
+$ systemctl restart docker
+
+$ docker ps
+
+$ docker stop testweb
+
+$ systemctl restart docker
+
+$ docker start testweb
+
+$ systemctl restart docker
+
+***********
+Exercise: Pulling a Docker Image from a Repository and Tagging It Locally
+
+NOTE: Although you may use any Linux Academy Cloud Server and distribution that is available to complete these exercises, the course demonstrations, and the provided solutions are all using CentOS 7 executing commands with the 'user' account. NOTE: You can also use the 'Docker Certification' Lab Server and skip the initial installation and setup steps if you feel comfortable with the process.
+
+1. Install Docker and configure it so that it is running and will automatically start on boot.
+
+2. Using the appropriate Docker commands pull the latest 'Ubuntu' image from the repository so that it is available for container instantiation on your local system.
+
+3. Display the images currently installed on the local system to confirm that the 'Ubuntu' image is available from the prior step.
+
+4. Tag the 'ubuntu:latest' image that you have downloaded so that you can refer to it with a shorter name. Choose to tag the image with the name and tag 'my:ubuntu'
+
+5. Display the resulting image list on your system to confirm the previous command
+
+Solution:
+---------
+[user@tcox4 ~]$ sudo yum install docker
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: centos.mirrors.tds.net
+ * epel: fedora-epel.mirrors.tds.net
+ * extras: mirrors.tripadvisor.com
+ * nux-dextop: li.nux.ro
+ * updates: mirror.net.cen.ct.gov
+Resolving Dependencies
+--> Running transaction check
+---> Package docker.x86_64 2:1.12.6-55.gitc4618fb.el7.centos will be installed
+
+[... more YUM stuff here ...]
+
+Installed:
+  docker.x86_64 2:1.12.6-55.gitc4618fb.el7.centos                                                                                                          
+
+Dependency Installed:
+  container-selinux.noarch 2:2.21-2.gitba103ac.el7                             container-storage-setup.noarch 0:0.6.0-1.gite67c964.el7                    
+  device-mapper-event.x86_64 7:1.02.140-8.el7                                  device-mapper-event-libs.x86_64 7:1.02.140-8.el7                           
+  device-mapper-persistent-data.x86_64 0:0.7.0-0.1.rc6.el7                     docker-client.x86_64 2:1.12.6-55.gitc4618fb.el7.centos                     
+  docker-common.x86_64 2:1.12.6-55.gitc4618fb.el7.centos                       libaio.x86_64 0:0.3.109-13.el7                                             
+  lvm2.x86_64 7:2.02.171-8.el7                                                 lvm2-libs.x86_64 7:2.02.171-8.el7                                          
+  oci-register-machine.x86_64 1:0-3.11.1.gitdd0daef.el7                        oci-systemd-hook.x86_64 1:0.1.12-1.git1e84754.el7                          
+  oci-umount.x86_64 2:1.12.6-55.gitc4618fb.el7.centos                          skopeo-containers.x86_64 1:0.1.23-1.git1bbd87f.el7                         
+  yajl.x86_64 0:2.0.4-4.el7                                                   
+
+Complete!
+[user@tcox4 ~]$ sudo systemctl enable docker && sudo systemctl start docker
+[sudo] password for user: 
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+2. Using the appropriate Docker commands pull the latest 'Ubuntu' image from the repository so that it is available for container instantiation on your local system.
+
+[user@tcox4 ~]$ sudo docker pull ubuntu:latest
+Trying to pull repository docker.io/library/ubuntu ... 
+latest: Pulling from docker.io/library/ubuntu
+
+ae79f2514705: Pull complete 
+5ad56d5fc149: Pull complete 
+170e558760e8: Pull complete 
+395460e233f5: Pull complete 
+6f01dc62e444: Pull complete 
+Digest: sha256:506e2d5852de1d7c90d538c5332bd3cc33b9cbd26f6ca653875899c505c82687
+3. Display the images currently installed on the local system to confirm that the 'Ubuntu' image is available from the prior step.
+
+[user@tcox4 ~]$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker.io/ubuntu    latest              747cb2d60bbe        7 days ago          122 MB
+4. Tag the 'ubuntu:latest' image that you have downloaded so that you can refer to it with a shorter name. Choose to tag the image with the name and tag 'my:ubuntu'
+
+[user@tcox4 ~]$ sudo docker tag ubuntu:latest my:ubuntu
+5. Display the resulting image list on your system to confirm the previous command
+
+[user@tcox4 ~]$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker.io/ubuntu    latest              747cb2d60bbe        7 days ago          122 MB
+my                  ubuntu              747cb2d60bbe        7 days ago          122 MB
+
+
+**************
+Exercise: Creating a New Image from a Container
+
+NOTE: These exercises can be completed using the Linux Academy Cloud Servers running any distribution's latest version. The solutions below assume that CentOS 7 host cloud server was used. NOTE: You can use the Linux Academy 'Docker Certification' Cloud Server in lieu of completing a fresh installation and configuration of your environment.
+
+Using the CentOS 6 base image download, start a container based on that image. Be sure that container starts connected to the current terminal in interactive mode and runs the bash command so you are logged in to the command prompt on the container once it boots.
+Once you are sitting at a command prompt on the running container, execute the update command (installing all updates for the container OS).
+Now that updates are complete, install the Apache Web Server. Once installed, make sure the web server service will start and verify that the container is listening on port 80 (install other software if needed to do so).
+Exit the container. Once the container is stopped, execute the appropriate command to list all stopped containers and locate the name and ID of the container you just exited. Make a note of the name and ID.
+Using the name or ID of the container, commit the changes you made within it to a new base image called "newcentos:withapache" and verify that it shows when you list the images on your system.
+
+
+Using the CentOS 6 base image download, start a container based on that image. Be sure that container starts connected to the current terminal in interactive mode and runs the bash command so you are logged in to the command prompt on the container once it boots.
+[user@linuxacademy:~]$ docker run -it centos:6 /bin/bash
+(Output)
+
+[root@b237d65fd197 /]#
+(Output) 
+Once you are sitting at a command prompt on the running container, execute the update command (installing all updates for the container OS).
+[root@b237d65fd197 /]# yum -y update (or yum -y upgrade)
+(Output)
+List of packages needing update and being applied here
+(Output)
+Now that updates are complete, install the Apache Web Server. Once installed, make sure the web server service will start and verify that the container is listening on port 80 (install other software if needed to do so).
+[root@b237d65fd197 /]# yum install httpd
+(Output)
+Installed:
+  httpd.x86_64 0:2.4.15-45.el7.centos                                                                                             
+
+Dependency Installed:
+  apr.x86_64 0:1.3.9-5.el7_2                   apr-util.x86_64 0:1.3.9-3.el7_0.1    apr-util-ldap.x86_64 0:1.3.9-3.el7_0.1        
+  httpd-tools.x86_64 0:2.2.15-45.el7.centos    mailcap.noarch 0:2.1.31-2.el7        redhat-logos.noarch 0:60.0.14-12.el7.centos   
+
+Complete!
+(Output)
+
+[root@b237d65fd197 /]# yum install telnet
+(Output)
+Like output above, telnet is installed
+(Output)
+
+[root@b237d65fd197 /]# service httpd start
+Starting httpd: httpd: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2 for ServerName
+                                                           [  OK  ]
+
+[root@b237d65fd197 /]# telnet localhost 80
+(Output)
+Trying 127.0.0.1...
+Connected to localhost.localdomain.
+Escape character is '^]'.
+(Output)
+Exit the container. Once the container is stopped, execute the appropriate command to list all stopped containers and locate the name and ID of the container you just exited. Make a note of the name and ID.
+[root@b237d65fd197 /]# exit
+
+[user@linuxacademy:~]$ docker ps -a
+(Output)
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                   PORTS               NAMES
+b237d65fd197        centos:latest       "/bin/bash"         2 minutes ago       Exited (0) 2 minutes ago                       angry_albert
+(Output)
+Using the name or ID of the container, commit the changes you made within it to a new base image called "newcentos:withapache" and verify that it shows when you list the images on your system.
+[user@linuxacademy:~]$ docker commit b237d65fd197 newcentos:withapache
+(Output)
+18bd1fc4d60fa29ff9591f46b86ea0ad7652214d81b4e26343723e81fdbffd8a
+(Output)
+
+[user@linuxacademy:~]$ docker images
+(Output)
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+newcentos           withapache          18bd1fc4d60f        4 seconds ago       480.6 MB
+centos              7                   a005304e4e74        9 weeks ago         203.1 MB
+centos              centos6             a005304e4e74        9 weeks ago         203.1 MB
+(Output)
+
+***************
+
+Exercise: Managing Containers (Creating, Starting and Stopping)
+
+NOTE: Although you can successfully complete this exercise using any available Linux Academy distribution and version, the solution presented was created on a CentOS 7 Cloud Server. You may have differences in your commands or output depending on the distribution and version you are running.  NOTE: You can use the Linux Academy 'Docker Certification' Cloud Server in lieu of completing a fresh installation and configuration of your environment.
+
+1. Create a container from the base image for the latest version of Ubuntu available (if you do not have an Ubuntu base image installed locally, pull the latest one down for your local repository). The container should be started in interactive mode attached to the current terminal and running the bash shell. Once running, shut the container down by exiting.
+
+2. Run the appropriate Docker command to get the name of the previously run container. Issue the appropriate command to restart the container that you obtained the name of. Do NOT create a new container, restart the one we just used.
+
+3. Stop the container. Remove that container from the system completely using the appropriate command.
+
+4. Create (not run) a container called "my_container", create it with parameters that will allow it to run interactively and attached to the local console running the bash shell. Verify that the container is not running.
+
+5. Start the container and again, verify the container is running. Run the appropriate command to attach your session to the running container so you are logged into the shell.
+
+1. Create a container from the base image for the latest version of Ubuntu available (if you do not have an Ubuntu base image installed locally, pull the latest one down for your local repository). The container should be started in interactive mode attached to the current terminal and running the bash shell. Once running, shut the container down by exiting.
+
+[user@tcox1 ~]$ sudo docker pull ubuntu:latest
+Trying to pull repository docker.io/library/ubuntu ... 
+latest: Pulling from docker.io/library/ubuntu
+
+ae79f2514705: Pull complete 
+5ad56d5fc149: Pull complete 
+170e558760e8: Pull complete 
+395460e233f5: Pull complete 
+6f01dc62e444: Pull complete 
+Digest: sha256:506e2d5852de1d7c90d538c5332bd3cc33b9cbd26f6ca653875899c505c82687
+[user@tcox1 ~]$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker.io/httpd     latest              c24f66af34b4        5 days ago          177.3 MB
+docker.io/ubuntu    latest              747cb2d60bbe        7 days ago          122 MB
+[user@tcox1 ~]$ sudo docker run -it ubuntu:latest /bin/bash
+root@f1d4d12c2c70:/# exit
+exit
+2. Run the appropriate Docker command to get the name of the previously run container. Issue the appropriate command to restart the container that you obtained the name of. Do NOT create a new container, restart the one we just used.
+
+[user@tcox1 ~]$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED              STATUS                          PORTS               NAMES
+f1d4d12c2c70        ubuntu:latest       "/bin/bash"         About a minute ago   Exited (0) About a minute ago                       jovial_kilby
+[user@tcox1 ~]$ sudo docker restart jovial_kilby
+jovial_kilby
+[user@tcox1 ~]$ sudo docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+f1d4d12c2c70        ubuntu:latest       "/bin/bash"         2 minutes ago       Up 7 seconds                            jovial_kilby
+3. Stop the container. Remove that container from the system completely using the appropriate command.
+
+[user@tcox1 ~]$ sudo docker stop jovial_kilby
+jovial_kilby
+[user@tcox1 ~]$ sudo docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[user@tcox1 ~]$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
+f1d4d12c2c70        ubuntu:latest       "/bin/bash"         3 minutes ago       Exited (0) 10 seconds ago                       jovial_kilby
+[user@tcox1 ~]$ sudo docker rm jovial_kilby
+jovial_kilby
+[user@tcox1 ~]$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+4. Create (not run) a container called "my_container", create it with parameters that will allow it to run interactively and attached to the local console running the bash shell. Verify that the container is not running.
+
+[user@tcox1 ~]$ sudo docker create -it --name="my-container" ubuntu:latest /bin/bash
+c90b35870c09fe63d1bac782342dd734b2edf4ac6abb282690d1585aa259841e
+[user@tcox1 ~]$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+c90b35870c09        ubuntu:latest       "/bin/bash"         4 seconds ago       Created                                 my-container
+5. Start the container and again, verify the container is running. Run the appropriate command to attach your session to the running container so you are logged into the shell.
+
+[user@tcox1 ~]$ sudo docker start my-container
+my-container
+[user@tcox1 ~]$ sudo docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+c90b35870c09        ubuntu:latest       "/bin/bash"         4 minutes ago       Up 2 minutes                            my-container
+[user@tcox1 ~]$ sudo docker attach my-container
+root@c90b35870c09:/# 
+root@c90b35870c09:/# exit
+exit
+
+*********************
+
+4. Orchestration (25% of Exam)
+
+4.1 Lecture: State the Difference Between Running a Container and Running a Service
+----------
+
+Containers – docker run
+The ‘docker run’ command was originally the container equivalent of ‘the face that launched a
+thousand ships’. It is responsible for the container revolution that we are in now, but times are
+changing.
+Although containers give us the flexibility, portability, granularity, and abstraction to get the
+most out of our environments and deployments, it is quickly becoming ‘too limited’.
+We need an easier way to deploy complex configurations in highly available and easily scalable
+implementations. This requires the development of cluster management and control software
+(like Docker Swarm or Kubernetes) to work directly with Docker containers. As a result, a new
+paradigm is needed to address the requirements of highly scalable, clustered container
+environments.
+
+Services – docker service
+
+Using ‘docker service’ is the solution to managing containers deployed in highly available, easily
+scalable cluster implementations.
+We can now think of a service as something that is consumed within the context of a larger
+application (which can include other Docker Services in its makeup).
+Whereas containers are limited to the single host they are started on;
+services are containers that live on a scalable number of ‘workers’ in a
+cluster of systems. Docker Swarm handles access to, and the availability
+of, that service across those worker nodes, eliminating the challenges of
+routing and accessing individual containers.
+Scalability is key in the enterprise, both up and down, in order to maximize
+your infrastructure spend. The scalability services allow you to take
+granular control of your CPU, Memory, Disk, Network, and more.
+
+Quick Hits
+
+Containers
+• Encapsulate an application or function.
+• Run on a single host at a time.
+• Require manual steps to expose
+functionality outside of the host system
+(ports, network and/or volumes).
+• Require more complex configuration to
+use multiple instances (proxies for
+example).
+• Not highly available.
+• Not easily scalable.
+
+
+Services
+• Encapsulate an application or function.
+• Can run on ‘1 to n’ nodes at any time.
+• Functionality is easily accessed using
+features like ‘routing mesh’ outside the
+worker nodes.
+• Multiple instances are set to launch in a
+single command.
+• Highly available clusters are available.
+• Easily scalable (up or down as needed).
