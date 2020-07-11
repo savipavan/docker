@@ -1,0 +1,5 @@
+Docker VT-X issue
+https://stackoverflow.com/questions/57441382/error-with-pre-create-check-this-computer-doesnt-have-vt-x-amd-v-enabled-ena
+docker-machine create -d virtualbox --virtualbox-memory=4096 \
+    --virtualbox-cpu-count=4 --virtualbox-disk-size=40960 \
+    --virtualbox-no-vtx-check default
